@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#a7d6f9" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1e2b" media="(prefers-color-scheme: dark)">
+  <title>CHW 我的世界服务器 · 教程与简介</title>
+
+  <style>
+    :root{--bg:#a7d6f9;--fg:#1b1b1b;--accent:#3aa63f;--accent-2:#d22f27;--card:#fffbea;--radius:16px;--shadow:0 8px 32px rgba(0,0,0,.08);--font:"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC",sans-serif}
+    @media(prefers-color-scheme:dark){:root{--bg:#0b1e2b;--fg:#e4e4e4;--accent:#3fd14b;--accent-2:#ff5b49;--card:#202020;--shadow:0 8px 32px rgba(0,0,0,.4)}}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(to bottom,var(--bg) 0 65%,#7dbb45 65% 100%);color:var(--fg);font-family:var(--font);line-height:1.6;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+    .container{width:min(960px,100%);padding:clamp(1rem,3vw,2rem);display:flex;flex-direction:column;align-items:center;gap:clamp(1rem,2.5vw,1.5rem);justify-content:center}
+    .card{background:var(--card);border-radius:var(--radius);padding:clamp(2rem,5vw,3.5rem);box-shadow:var(--shadow);text-align:center;max-width:680px;width:100%;outline:3px solid rgba(0,0,0,.08)}
+    h1{font-size:clamp(1.8rem,5vw,2.6rem);font-weight:700;color:var(--accent);margin-bottom:1rem}
+    p{font-size:clamp(1rem,2.5vw,1.2rem);margin:.35rem 0}
+    .info{margin:1rem 0 0;color:var(--fg)}
+    .pill{display:inline-block;background:rgba(0,0,0,.06);padding:.35em .75em;border-radius:999px;margin:.25rem}
+    @media(prefers-color-scheme:dark){.pill{background:rgba(255,255,255,.08)}}
+    .actions{margin-top:1.25rem}
+    .btn{display:inline-block;background:var(--accent);color:#fff;padding:.6em 1.4em;border-radius:10px;text-decoration:none;font-weight:600;transition:filter .2s}
+    .btn:hover{filter:brightness(1.05)}
+    .btn:focus-visible{outline:3px solid rgba(15,188,255,.7);outline-offset:2px;box-shadow:0 0 0 6px rgba(15,188,255,.15)}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
+    html{scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.3) transparent}
+    ::-webkit-scrollbar{height:10px;width:10px}
+    ::-webkit-scrollbar-thumb{background:rgba(0,0,0,.25);border-radius:10px}
+    ::-webkit-scrollbar-track{background:transparent}
+    /* brand 变量与新增版块样式 */
+    :root{--brand:var(--accent)}
+    @media(prefers-color-scheme:dark){:root{--brand:var(--accent)}}
+    .section{padding:clamp(1.5rem,4vw,3rem) 0}
+    .section-alt{background:linear-gradient(to bottom,rgba(255,255,255,.06),transparent)}
+    .section-title{font-size:clamp(1.6rem,4vw,2.2rem);font-weight:700;color:var(--accent)}
+    .rules-slogan{font-size:1rem;opacity:.9;margin-top:.25rem}
+    .rules-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:clamp(12px,2.5vw,16px);margin-top:1rem}
+    .about-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(12px,2.5vw,16px);margin-top:1rem}
+    .about-block{background:var(--card);border-radius:var(--radius);padding:clamp(1rem,2.5vw,1.25rem);outline:3px solid rgba(0,0,0,.06)}
+    .lead{font-size:1.05rem;opacity:.92}
+    .site-footer{margin-top:2rem;padding:1rem 0;color:var(--fg);opacity:.8}
+    .footer-inner{display:flex;justify-content:space-between;align-items:center;gap:1rem}
+    .back-to-top{display:inline-block;background:rgba(0,0,0,.06);padding:.35em .6em;border-radius:999px;text-decoration:none;color:var(--fg)}
+    @media(prefers-color-scheme:dark){.back-to-top{background:rgba(255,255,255,.08)}}
+  </style>
+
+</head>
+<body>
+  <div id="top"></div>
+  <div class="container">
+    <main class="card" aria-label="复制插件教程">
+      <h1>复制插件教程</h1>
+      <p>视频为复制插件的教程，点击下方按钮观看。</p>
+      <p>教程摘要：放下后挖掘反复会出现两个潜影盒，要复制的要放在一个潜影盒里。</p>
+      <p>需要更精细的教程请进群：1015259615。</p>
+      <div class="actions">
+        <a class="btn" href="https://www.bilibili.com/video/BV1SQsdzHECJ?vd_source=5075c7b31f7fb42c958513568a1e8eb2" aria-label="打开 B站复制教程" target="_blank" rel="noopener noreferrer">观看教程</a>
+      </div>
+    </main>
+
+    <section class="card" aria-label="服务器简介">
+      <h2>服务器简介</h2>
+      <div class="info">
+        <span class="pill">IP：mcrhy.online</span>
+        <span class="pill">版本：1.7.0 — 1.21.3</span>
+        <span class="pill">平台：Java</span>
+      </div>
+      <div class="actions">
+        <a class="btn" href="index.html" aria-label="返回首页">返回首页</a>
+      </div>
+    </section>
+
+    <!-- 玩家守则 -->
+    <section id="rules" class="section">
+      <div class="container">
+        <h2 class="section-title">玩家守则</h2>
+        <p class="rules-slogan">我们的核心理念：尊重、合作与快乐游戏</p>
+        <div class="rules-grid">
+          <article class="card">
+            <h3>👥 文明礼貌</h3>
+            <ul>
+              <li>禁止任何形式的辱骂、人身攻击、歧视性言论</li>
+              <li>公共频道请文明聊天，禁止刷屏和发布广告</li>
+              <li>尊重其他玩家的游戏体验</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>🚫 禁止作弊</h3>
+            <ul>
+              <li>严禁使用任何外挂、作弊客户端</li>
+              <li>禁止使用BUG复制物品或利用漏洞</li>
+              <li>维护游戏公平性与平衡性</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>🏠 财产保护</h3>
+            <ul>
+              <li>未经允许禁止盗窃、破坏他人建筑</li>
+              <li>尊重他人劳动成果与私有财产</li>
+              <li>在他人建筑附近施工请保持沟通</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>🌍 环境保护</h3>
+            <ul>
+              <li>禁止恶意建造"出生点陷阱"</li>
+              <li>请勿随意破坏地形与环境</li>
+              <li>及时清理大型工程残留</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>🤝 共同建设</h3>
+            <ul>
+              <li>鼓励玩家间互助合作</li>
+              <li>共享公共设施与资源</li>
+              <li>发现BUG请及时向管理员汇报</li>
+            </ul>
+          </article>
+          <article class="card">
+            <h3>⚖️ 违规处理</h3>
+            <p>违规者将视情节受到警告、清除物资、封禁等处罚。希望大家共同维护这个美好的家园！</p>
+            <div style="margin-top: 12px; padding: 12px; background: rgba(92, 200, 255, 0.1); border-radius: 8px;">
+              <small style="color: var(--brand);">💡 温馨提示：良好的游戏环境需要大家共同创造</small>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- 关于 SB -->
+    <section id="about" class="section section-alt">
+      <div class="container">
+        <h2 class="section-title">关于 SB</h2>
+        <p class="lead">SB 不仅仅是一个服务器名称，更是我们奉行的最高准则</p>
+        <div class="about-grid">
+          <div class="about-block">
+            <h3>🎯 SB 的含义</h3>
+            <p><strong>SB = Together, Build, Survival（一起建造生存）</strong></p>
+            <p>这代表着我们的核心理念：在生存的基础上，通过合作建造来创造更丰富的游戏体验。</p>
+          </div>
+          <div class="about-block">
+            <h4>🤝 Together（一起）</h4>
+            <p>我们拒绝孤独。每一个夜晚的灯火，每一次对末影龙的征讨，都因有彼此的陪伴而充满意义。</p>
+          </div>
+          <div class="about-block">
+            <h4>🏗️ Build（建造）</h4>
+            <p>从第一间遮风挡雨的小木屋，到众人惊叹的宏伟红岩城。我们相信，双手共同垒起的，不仅是方块，更是牢不可破的友谊。</p>
+          </div>
+          <div class="about-block">
+            <h4>🌱 Survival（生存）</h4>
+            <p>在纯粹的原版世界中，我们体验最本真的挑战与乐趣。而这一切，都因"一起"和"建造"而被赋予了更深层的含义。</p>
+          </div>
+          <div class="about-block">
+            <h4>🏠 我们的承诺</h4>
+            <p>SB 不只是一个服务器，它是一个承诺——承诺在这里，你的每一次努力都将被见证，你的每一份创造都将被珍视。</p>
+            <p style="margin-top: 12px; color: var(--brand); font-weight: 600;">欢迎回家，让我们一起建造。</p>
+          </div>
+          <div class="about-block">
+            <h4>🌟 社区特色</h4>
+            <ul>
+              <li>纯净的原版生存体验</li>
+              <li>活跃友好的玩家社区</li>
+              <li>定期的社区活动与建筑比赛</li>
+              <li>稳定的服务器性能</li>
+              <li>用心的管理员团队</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <span>© 2025 SB Survival. Together, Build, Survival.</span>
+        <a href="#top" class="back-to-top" aria-label="返回顶部">↑</a>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
