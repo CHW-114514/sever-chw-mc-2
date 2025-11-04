@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#a7d6f9" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1e2b" media="(prefers-color-scheme: dark)">
+  <title>注册 - CHW 服务器</title>
+  <style>
+    :root{--bg:#a7d6f9;--fg:#1b1b1b;--accent:#3aa63f;--accent-2:#d22f27;--card:#fffbea;--radius:16px;--shadow:0 8px 32px rgba(0,0,0,.08);--font:"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC",sans-serif}
+    @media(prefers-color-scheme:dark){:root{--bg:#0b1e2b;--fg:#e4e4e4;--accent:#3fd14b;--accent-2:#ff5b49;--card:#202020;--shadow:0 8px 32px rgba(0,0,0,.4)}}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(to bottom,var(--bg) 0 65%,#7dbb45 65% 100%);color:var(--fg);font-family:var(--font);line-height:1.6;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+    
+    /* 任务栏样式 */
+    .taskbar{position:fixed;top:0;left:0;right:0;background:var(--card);box-shadow:var(--shadow);padding:0.75rem 1.5rem;z-index:999;display:flex;justify-content:space-between;align-items:center}
+    .taskbar-logo{font-size:1.25rem;font-weight:700;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:0.5rem}
+    .taskbar-logo:hover{opacity:0.9}
+    .taskbar-nav{display:flex;gap:1rem;align-items:center}
+    .taskbar-link{color:var(--fg);text-decoration:none;padding:0.5rem 0.75rem;border-radius:8px;transition:background-color 0.2s, transform 0.15s}
+    .taskbar-link:hover{background-color:rgba(0,0,0,0.04)}
+    .taskbar-link:focus-visible{outline:3px solid rgba(15,188,255,0.7);outline-offset:2px}
+    @media(prefers-color-scheme:dark){.taskbar-link:hover{background-color:rgba(255,255,255,0.04)}}
+    
+    /* 响应式调整 */
+    @media (max-width: 600px) {
+      .taskbar{padding:0.75rem 1rem}
+      .taskbar-nav{gap:0.5rem}
+      .taskbar-link{padding:0.4rem 0.6rem;font-size:0.9rem}
+    }
+    
+    /* 注册表单样式 */
+    .register-container{margin-top:60px;width:min(960px,100%);padding:clamp(1rem,3vw,2rem);display:flex;justify-content:center}
+    .register-card{background:var(--card);border-radius:var(--radius);padding:clamp(2rem,5vw,3.5rem);box-shadow:var(--shadow);width:100%;max-width:400px;outline:3px solid rgba(0,0,0,.08)}
+    h1{font-size:clamp(1.8rem,5vw,2.2rem);font-weight:700;color:var(--accent);margin-bottom:1.5rem;text-align:center}
+    .form-group{margin-bottom:1.25rem}
+    label{display:block;margin-bottom:0.5rem;font-weight:500}
+    input{width:100%;padding:0.75rem;border:2px solid rgba(0,0,0,0.1);border-radius:8px;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:1rem;transition:border-color 0.2s}
+    @media(prefers-color-scheme:dark){input{border-color:rgba(255,255,255,0.1);background:var(--card)}}
+    input:focus{outline:none;border-color:var(--accent)}
+    .btn{display:block;width:100%;background:var(--accent);color:#fff;padding:0.75rem;border-radius:8px;font-size:1rem;font-weight:600;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s;margin-top:1.5rem}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.25)}
+    .btn:active{transform:translateY(0)}
+    .btn:focus-visible{outline:3px solid rgba(15,188,255,.7);outline-offset:2px;box-shadow:0 0 0 6px rgba(15,188,255,.15)}
+    .links{margin-top:1.5rem;text-align:center}
+    .links a{color:var(--accent);text-decoration:none}
+    .links a:hover{text-decoration:underline}
+    .error-message, .success-message{padding:0.75rem;border-radius:8px;margin-bottom:1rem;display:none}
+    .error-message{background-color:var(--accent-2);color:white}
+    .success-message{background-color:var(--accent);color:white}
+    .login-link{margin-top:1rem}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
+  </style>
+</head>
+<body>
+  <!-- 任务栏 -->
+  <header class="taskbar">
+    <a href="index.html" class="taskbar-logo" aria-label="返回首页">
+      <span>🅒🅗🅦</span>
+      <span>CHW 服务器</span>
+    </a>
+    <nav class="taskbar-nav" aria-label="主导航">
+      <a href="index.html" class="taskbar-link">首页</a>
+      <a href="index1.html" class="taskbar-link">服务器介绍</a>
+    </nav>
+  </header>
+  
+  <div class="register-container">
+    <div class="register-card">
+      <h1>注册 CHW 服务器账号</h1>
+      <div id="errorMessage" class="error-message"></div>
+      <div id="successMessage" class="success-message"></div>
+      <form id="registerForm" onsubmit="handleRegister(event)">
+        <div class="form-group">
+          <label for="username">用户名</label>
+          <input type="text" id="username" name="username" required minlength="3" maxlength="20">
+        </div>
+        <div class="form-group">
+          <label for="password">密码</label>
+          <input type="password" id="password" name="password" required minlength="6">
+        </div>
+        <div class="form-group">
+          <label for="inviteCode">邀请码</label>
+          <input type="text" id="inviteCode" name="inviteCode" required placeholder="请输入邀请码">
+        </div>
+        <button type="submit" class="btn">注册</button>
+        <div class="links">
+          <div class="login-link">已有账号？ <a href="login.html">立即登录</a></div>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <script src="data.js"></script>
+  <script src="auth.js"></script>
+</body>
+</html>

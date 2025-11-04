@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light dark">
+  <meta name="theme-color" content="#a7d6f9" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0b1e2b" media="(prefers-color-scheme: dark)">
+  <title>管理员面板 - CHW 服务器</title>
+  <style>
+    :root{--bg:#a7d6f9;--fg:#1b1b1b;--accent:#3aa63f;--accent-2:#d22f27;--card:#fffbea;--radius:16px;--shadow:0 8px 32px rgba(0,0,0,.08);--font:"Segoe UI",Roboto,"Helvetica Neue",Arial,"PingFang SC",sans-serif}
+    @media(prefers-color-scheme:dark){:root{--bg:#0b1e2b;--fg:#e4e4e4;--accent:#3fd14b;--accent-2:#ff5b49;--card:#202020;--shadow:0 8px 32px rgba(0,0,0,.4)}}
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    body{min-height:100vh;display:flex;flex-direction:column;align-items:center;background:linear-gradient(to bottom,var(--bg) 0 65%,#7dbb45 65% 100%);color:var(--fg);font-family:var(--font);line-height:1.6;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+    
+    /* 任务栏样式 */
+    .taskbar{position:fixed;top:0;left:0;right:0;background:var(--card);box-shadow:var(--shadow);padding:0.75rem 1.5rem;z-index:999;display:flex;justify-content:space-between;align-items:center}
+    .taskbar-logo{font-size:1.25rem;font-weight:700;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:0.5rem}
+    .taskbar-logo:hover{opacity:0.9}
+    .taskbar-nav{display:flex;gap:1rem;align-items:center}
+    .taskbar-link{color:var(--fg);text-decoration:none;padding:0.5rem 0.75rem;border-radius:8px;transition:background-color 0.2s, transform 0.15s}
+    .taskbar-link:hover{background-color:rgba(0,0,0,0.04)}
+    .taskbar-link:focus-visible{outline:3px solid rgba(15,188,255,0.7);outline-offset:2px}
+    @media(prefers-color-scheme:dark){.taskbar-link:hover{background-color:rgba(255,255,255,0.04)}}
+    
+    /* 响应式调整 */
+    @media (max-width: 600px) {
+      .taskbar{padding:0.75rem 1rem}
+      .taskbar-nav{gap:0.5rem}
+      .taskbar-link{padding:0.4rem 0.6rem;font-size:0.9rem}
+    }
+    
+    /* 管理员面板样式 */
+    .admin-container{margin-top:80px;width:min(960px,100%);padding:clamp(1rem,3vw,2rem);display:flex;flex-direction:column;align-items:center;gap:2rem}
+    .card{background:var(--card);border-radius:var(--radius);padding:clamp(2rem,5vw,3.5rem);box-shadow:var(--shadow);width:100%;outline:3px solid rgba(0,0,0,.08)}
+    h1{font-size:clamp(1.8rem,5vw,2.2rem);font-weight:700;color:var(--accent);margin-bottom:1.5rem;text-align:center}
+    h2{font-size:clamp(1.4rem,4vw,1.8rem);font-weight:700;color:var(--accent);margin-bottom:1rem}
+    .form-group{margin-bottom:1.25rem}
+    label{display:block;margin-bottom:0.5rem;font-weight:500}
+    input, textarea{width:100%;padding:0.75rem;border:2px solid rgba(0,0,0,0.1);border-radius:8px;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:1rem;transition:border-color 0.2s}
+    textarea{min-height:120px;resize:vertical}
+    @media(prefers-color-scheme:dark){input, textarea{border-color:rgba(255,255,255,0.1);background:var(--card)}}
+    input:focus, textarea:focus{outline:none;border-color:var(--accent)}
+    .btn{display:inline-block;background:var(--accent);color:#fff;padding:0.75rem 1.5rem;border-radius:8px;font-size:1rem;font-weight:600;border:none;cursor:pointer;transition:transform .2s,box-shadow .2s,background .2s}
+    .btn:hover{transform:translateY(-2px);box-shadow:0 4px 16px rgba(0,0,0,.25)}
+    .btn:active{transform:translateY(0)}
+    .btn:focus-visible{outline:3px solid rgba(15,188,255,.7);outline-offset:2px;box-shadow:0 0 0 6px rgba(15,188,255,.15)}
+    .btn.secondary{background:var(--accent-2);margin-left:0.75rem}
+    .btn-group{margin-top:1rem}
+    .error-message, .success-message{padding:0.75rem;border-radius:8px;margin-bottom:1rem;display:none}
+    .error-message{background-color:var(--accent-2);color:white}
+    .success-message{background-color:var(--accent);color:white}
+    .invite-codes-list{margin-top:1.5rem;max-height:300px;overflow-y:auto}
+    .invite-code-item{background:var(--bg);padding:0.75rem;border-radius:8px;margin-bottom:0.5rem;display:flex;justify-content:space-between;align-items:center}
+    @media(prefers-color-scheme:dark){.invite-code-item{background:var(--card)}}
+    .invite-code-text{font-family:monospace;word-break:break-all}
+    .delete-btn{background:var(--accent-2);color:white;border:none;padding:0.35rem 0.75rem;border-radius:6px;cursor:pointer}
+    .announcement-item{background:var(--bg);padding:1rem;border-radius:8px;margin-bottom:1rem}
+    @media(prefers-color-scheme:dark){.announcement-item{background:var(--card)}}
+    .announcement-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:0.5rem}
+    .announcement-title{font-weight:700}
+    .announcement-date{font-size:0.9rem;opacity:0.7}
+    .announcement-content{margin-top:0.5rem}
+    @media(prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important}}
+  </style>
+</head>
+<body>
+  <!-- 任务栏 -->
+  <header class="taskbar">
+    <a href="index.html" class="taskbar-logo" aria-label="返回首页">
+      <span>🅒🅗🅦</span>
+      <span>CHW 服务器</span>
+    </a>
+    <nav class="taskbar-nav" aria-label="主导航">
+      <a href="index.html" class="taskbar-link">首页</a>
+      <a href="index1.html" class="taskbar-link">服务器介绍</a>
+      <button id="logoutBtn" class="taskbar-link" style="background:none;border:none;padding:0.5rem 0.75rem;color:var(--fg);font-family:var(--font);font-size:1rem;cursor:pointer">退出登录</button>
+    </nav>
+  </header>
+  
+  <div class="admin-container">
+    <div class="card">
+      <h1>管理员面板</h1>
+      <div id="adminErrorMessage" class="error-message"></div>
+      <div id="adminSuccessMessage" class="success-message"></div>
+    </div>
+    
+    <!-- 邀请码管理 -->
+    <div class="card">
+      <h2>邀请码管理</h2>
+      <div class="form-group">
+        <label for="codeCount">生成邀请码数量</label>
+        <input type="number" id="codeCount" name="codeCount" min="1" max="10" value="1">
+      </div>
+      <div class="btn-group">
+        <button class="btn" onclick="generateInviteCodes()">生成邀请码</button>
+      </div>
+      <div class="invite-codes-list" id="inviteCodesList">
+        <!-- 邀请码将在这里动态显示 -->
+      </div>
+    </div>
+    
+    <!-- 公告管理 -->
+    <div class="card">
+      <h2>公告管理</h2>
+      <form id="announcementForm" onsubmit="handleAnnouncementSubmit(event)">
+        <div class="form-group">
+          <label for="announcementTitle">标题</label>
+          <input type="text" id="announcementTitle" name="announcementTitle" required>
+        </div>
+        <div class="form-group">
+          <label for="announcementContent">内容</label>
+          <textarea id="announcementContent" name="announcementContent" required></textarea>
+        </div>
+        <div class="btn-group">
+          <button type="submit" class="btn">发布公告</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  
+  <script src="data.js"></script>
+  <script src="auth.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

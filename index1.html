@@ -13,6 +13,28 @@
     @media(prefers-color-scheme:dark){:root{--bg:#0b1e2b;--fg:#e4e4e4;--accent:#3fd14b;--accent-2:#ff5b49;--card:#202020;--shadow:0 8px 32px rgba(0,0,0,.4)}}
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
     body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(to bottom,var(--bg) 0 65%,#7dbb45 65% 100%);color:var(--fg);font-family:var(--font);line-height:1.6;-webkit-font-smoothing:antialiased;-webkit-text-size-adjust:100%;-webkit-tap-highlight-color:transparent}
+    
+    /* 任务栏样式 */
+    .taskbar{position:fixed;top:0;left:0;right:0;background:var(--card);box-shadow:var(--shadow);padding:0.75rem 1.5rem;z-index:999;display:flex;justify-content:space-between;align-items:center}
+    .taskbar-logo{font-size:1.25rem;font-weight:700;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:0.5rem}
+    .taskbar-logo:hover{opacity:0.9}
+    .taskbar-nav{display:flex;gap:1rem;align-items:center}
+    .taskbar-link{color:var(--fg);text-decoration:none;padding:0.5rem 0.75rem;border-radius:8px;transition:background-color 0.2s, transform 0.15s}
+    .taskbar-link:hover{background-color:rgba(0,0,0,0.04)}
+    .taskbar-link:focus-visible{outline:3px solid rgba(15,188,255,0.7);outline-offset:2px}
+    @media(prefers-color-scheme:dark){.taskbar-link:hover{background-color:rgba(255,255,255,0.04)}}
+    .taskbar-link.active{background-color:var(--accent);color:white}
+    
+    /* 响应式调整 */
+    @media (max-width: 600px) {
+      .taskbar{padding:0.75rem 1rem}
+      .taskbar-nav{gap:0.5rem}
+      .taskbar-link{padding:0.4rem 0.6rem;font-size:0.9rem}
+    }
+    
+    /* 调整内容区域，避免被任务栏遮挡 */
+    .container{margin-top:60px}
+    
     .container{width:min(960px,100%);padding:clamp(1rem,3vw,2rem);display:flex;flex-direction:column;align-items:center;gap:clamp(1rem,2.5vw,1.5rem);justify-content:center}
     .card{background:var(--card);border-radius:var(--radius);padding:clamp(2rem,5vw,3.5rem);box-shadow:var(--shadow);text-align:center;max-width:680px;width:100%;outline:3px solid rgba(0,0,0,.08)}
     h1{font-size:clamp(1.8rem,5vw,2.6rem);font-weight:700;color:var(--accent);margin-bottom:1rem}
@@ -48,94 +70,75 @@
 
 </head>
 <body>
-  <div id="top"></div>
+  <!-- 任务栏 -->
+  <header class="taskbar">
+    <a href="index.html" class="taskbar-logo" aria-label="返回首页">
+      <span>🅒🅗🅦</span>
+      <span>CHW 服务器</span>
+    </a>
+    <nav class="taskbar-nav" aria-label="主导航">
+      <a href="index.html" class="taskbar-link" aria-current="false">首页</a>
+      <a href="index1.html" class="taskbar-link active" aria-current="page">服务器介绍</a>
+      <a href="login.html" class="taskbar-link">登录/注册</a>
+    </nav>
+  </header>
+  
   <div class="container">
-    <main class="card" aria-label="复制插件教程">
-      <h1>复制插件教程</h1>
-      <p>视频为复制插件的教程，点击下方按钮观看。</p>
-      <p>教程摘要：放下后挖掘反复会出现两个潜影盒，要复制的要放在一个潜影盒里。</p>
-      <p>需要更精细的教程请进群：1015259615。</p>
-      <div class="actions">
-        <a class="btn" href="https://www.bilibili.com/video/BV1SQsdzHECJ?vd_source=5075c7b31f7fb42c958513568a1e8eb2" aria-label="打开 B站复制教程" target="_blank" rel="noopener noreferrer">观看教程</a>
-      </div>
-    </main>
-
-    <section class="card" aria-label="服务器简介">
-      <h2>服务器简介</h2>
+    <main class="card">
+      <h1>CHW 服务器</h1>
+      <p>欢迎了解我们的服务器</p>
+      <p>IP: <strong>mcrhy.online</strong></p>
       <div class="info">
-        <span class="pill">IP：mcrhy.online</span>
-        <span class="pill">版本：1.7.0 — 1.21.3</span>
-        <span class="pill">平台：Java</span>
+        <span class="pill">1.20.1 版本</span>
+        <span class="pill">生存、创造</span>
+        <span class="pill">QQ群: 1015259615</span>
       </div>
       <div class="actions">
         <a class="btn" href="index.html" aria-label="返回首页">返回首页</a>
       </div>
-    </section>
+    </main>
 
     <!-- 玩家守则 -->
-    <section id="rules" class="section">
-      <div class="container">
-        <h2 class="section-title">玩家守则</h2>
-        <p class="rules-slogan">我们的核心理念：尊重、合作与快乐游戏</p>
-        <div class="rules-grid">
-          <article class="card">
-            <h3>👥 文明礼貌</h3>
-            <ul>
-              <li>禁止任何形式的辱骂、人身攻击、歧视性言论</li>
-              <li>公共频道请文明聊天，禁止刷屏和发布广告</li>
-              <li>尊重其他玩家的游戏体验</li>
-            </ul>
-          </article>
-          <article class="card">
-            <h3>🚫 禁止作弊</h3>
-            <ul>
-              <li>严禁使用任何外挂、作弊客户端</li>
-              <li>禁止使用BUG复制物品或利用漏洞</li>
-              <li>维护游戏公平性与平衡性</li>
-            </ul>
-          </article>
-          <article class="card">
-            <h3>🏠 财产保护</h3>
-            <ul>
-              <li>未经允许禁止盗窃、破坏他人建筑</li>
-              <li>尊重他人劳动成果与私有财产</li>
-              <li>在他人建筑附近施工请保持沟通</li>
-            </ul>
-          </article>
-          <article class="card">
-            <h3>🌍 环境保护</h3>
-            <ul>
-              <li>禁止恶意建造"出生点陷阱"</li>
-              <li>请勿随意破坏地形与环境</li>
-              <li>及时清理大型工程残留</li>
-            </ul>
-          </article>
-          <article class="card">
-            <h3>🤝 共同建设</h3>
-            <ul>
-              <li>鼓励玩家间互助合作</li>
-              <li>共享公共设施与资源</li>
-              <li>发现BUG请及时向管理员汇报</li>
-            </ul>
-          </article>
-          <article class="card">
-            <h3>⚖️ 违规处理</h3>
-            <p>违规者将视情节受到警告、清除物资、封禁等处罚。希望大家共同维护这个美好的家园！</p>
-            <div style="margin-top: 12px; padding: 12px; background: rgba(92, 200, 255, 0.1); border-radius: 8px;">
-              <small style="color: var(--brand);">💡 温馨提示：良好的游戏环境需要大家共同创造</small>
-            </div>
-          </article>
+    <section class="card section">
+      <h2 class="section-title">玩家守则</h2>
+      <p class="rules-slogan">共同维护和谐的游戏环境</p>
+      <div class="rules-grid">
+        <div class="about-block">
+          <h3>规则一</h3>
+          <p>禁止作弊行为，包括使用作弊模组、X-Ray等</p>
+        </div>
+        <div class="about-block">
+          <h3>规则二</h3>
+          <p>尊重其他玩家，友好交流，不进行侮辱或骚扰</p>
+        </div>
+        <div class="about-block">
+          <h3>规则三</h3>
+          <p>保护个人隐私，不分享敏感信息</p>
+        </div>
+        <div class="about-block">
+          <h3>规则四</h3>
+          <p>合理利用资源，不恶意破坏环境</p>
+        </div>
+        <div class="about-block">
+          <h3>规则五</h3>
+          <p>遵守管理员指令，配合服务器管理</p>
+        </div>
+        <div class="about-block">
+          <h3>规则六</h3>
+          <p>享受游戏过程，共同创造美好回忆</p>
         </div>
       </div>
     </section>
 
-
+    <!-- 页脚 -->
     <footer class="site-footer">
-      <div class="container footer-inner">
-        <span>© 2025 SB Survival. Together, Build, Survival.</span>
+      <div class="footer-inner">
+        <span>© 2025 CHW 服务器团队</span>
         <a href="#top" class="back-to-top" aria-label="返回顶部">↑</a>
       </div>
     </footer>
   </div>
-</body>
+<script src="data.js"></script>
+  <script src="auth.js"></script>
+  </body>
 </html>

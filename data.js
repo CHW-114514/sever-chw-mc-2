@@ -1,0 +1,182 @@
+// 数据存储文件 - 使用localStorage作为本地存储
+
+// 初始化默认数据
+function initData() {
+  // 初始化用户数据
+  if (!localStorage.getItem('users')) {
+    // 默认管理员账号
+    const defaultUsers = {
+      'admin': {
+        password: 'admin123', // 实际应用中应使用加密存储
+        role: 'admin',
+        createdAt: new Date().toISOString()
+      }
+    };
+    localStorage.setItem('users', JSON.stringify(defaultUsers));
+  }
+  
+  // 初始化邀请码数据（使用固定邀请码）
+  if (!localStorage.getItem('inviteCodes')) {
+    // 固定的邀请码列表
+    const fixedCodes = ['CHW2024', 'SERVER2024', 'WELCOME24', 'CHWINVITE', 'ADMINCODE'];
+    const defaultInviteCodes = {};
+    fixedCodes.forEach(code => {
+      defaultInviteCodes[code] = {
+        used: false,
+        createdAt: new Date().toISOString(),
+        usedBy: null,
+        usedAt: null
+      };
+    });
+    localStorage.setItem('inviteCodes', JSON.stringify(defaultInviteCodes));
+  }
+  
+  // 初始化公告数据
+  if (!localStorage.getItem('announcements')) {
+    const defaultAnnouncements = [];
+    localStorage.setItem('announcements', JSON.stringify(defaultAnnouncements));
+  }
+}
+
+// 随机生成邀请码
+function generateRandomCode(length = 8) {
+  const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+  let code = '';
+  for (let i = 0; i < length; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return code;
+}
+
+// 生成多个固定格式的邀请码
+function generateFixedFormatCodes(count = 1) {
+  const codes = [];
+  const existingCodes = new Set(Object.keys(JSON.parse(localStorage.getItem('inviteCodes') || '{}')));
+  const basePrefix = 'CHW-';
+  let counter = 1;
+  
+  while (codes.length < count) {
+    // 生成固定格式的邀请码：CHW-001, CHW-002, 等
+    const code = `${basePrefix}${counter.toString().padStart(3, '0')}`;
+    if (!existingCodes.has(code)) {
+      codes.push(code);
+      existingCodes.add(code);
+    }
+    counter++;
+  }
+  
+  return codes;
+}
+
+// 兼容旧代码的函数
+function generateRandomCodes(count = 1) {
+  return generateFixedFormatCodes(count);
+}
+
+// 获取用户数据
+function getUsers() {
+  return JSON.parse(localStorage.getItem('users') || '{}');
+}
+
+// 保存用户数据
+function saveUsers(users) {
+  localStorage.setItem('users', JSON.stringify(users));
+}
+
+// 获取邀请码数据
+function getInviteCodes() {
+  return JSON.parse(localStorage.getItem('inviteCodes') || '{}');
+}
+
+// 保存邀请码数据
+function saveInviteCodes(inviteCodes) {
+  localStorage.setItem('inviteCodes', JSON.stringify(inviteCodes));
+}
+
+// 获取公告数据
+function getAnnouncements() {
+  return JSON.parse(localStorage.getItem('announcements') || '[]');
+}
+
+// 保存公告数据
+function saveAnnouncements(announcements) {
+  localStorage.setItem('announcements', JSON.stringify(announcements));
+}
+
+// 添加新公告
+function addAnnouncement(title, content) {
+  const announcements = getAnnouncements();
+  const newAnnouncement = {
+    id: Date.now().toString(),
+    title: title,
+    content: content,
+    createdAt: new Date().toISOString()
+  };
+  announcements.unshift(newAnnouncement); // 新公告排在前面
+  saveAnnouncements(announcements);
+  return newAnnouncement;
+}
+
+// 验证邀请码是否有效
+function validateInviteCode(code) {
+  const inviteCodes = getInviteCodes();
+  return inviteCodes[code] && !inviteCodes[code].used;
+}
+
+// 标记邀请码已使用
+function markInviteCodeAsUsed(code, username) {
+  const inviteCodes = getInviteCodes();
+  if (inviteCodes[code]) {
+    inviteCodes[code].used = true;
+    inviteCodes[code].usedBy = username;
+    inviteCodes[code].usedAt = new Date().toISOString();
+    saveInviteCodes(inviteCodes);
+    return true;
+  }
+  return false;
+}
+
+// 删除邀请码
+function deleteInviteCode(code) {
+  const inviteCodes = getInviteCodes();
+  if (inviteCodes[code]) {
+    delete inviteCodes[code];
+    saveInviteCodes(inviteCodes);
+    return true;
+  }
+  return false;
+}
+
+// 保存登录状态
+function saveLoginState(username, role) {
+  localStorage.setItem('loggedInUser', JSON.stringify({
+    username: username,
+    role: role,
+    loggedInAt: new Date().toISOString()
+  }));
+}
+
+// 获取登录状态
+function getLoginState() {
+  const state = localStorage.getItem('loggedInUser');
+  return state ? JSON.parse(state) : null;
+}
+
+// 清除登录状态
+function clearLoginState() {
+  localStorage.removeItem('loggedInUser');
+}
+
+// 检查是否已登录
+function isLoggedIn() {
+  return !!getLoginState();
+}
+
+// 检查是否为管理员
+function isAdmin() {
+  const state = getLoginState();
+  return state && state.role === 'admin';
+}
+
+// 初始化数据
+initData();

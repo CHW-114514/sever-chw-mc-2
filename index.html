@@ -18,6 +18,27 @@
     .skip-link{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
     .skip-link:focus-visible{left:8px;top:8px;width:auto;height:auto;overflow:visible;background:var(--card);color:var(--fg);padding:.5em .75em;border-radius:8px;box-shadow:var(--shadow);transform:none;z-index:1000}
     
+    /* 任务栏样式 */
+    .taskbar{position:fixed;top:0;left:0;right:0;background:var(--card);box-shadow:var(--shadow);padding:0.75rem 1.5rem;z-index:999;display:flex;justify-content:space-between;align-items:center}
+    .taskbar-logo{font-size:1.25rem;font-weight:700;color:var(--accent);text-decoration:none;display:flex;align-items:center;gap:0.5rem}
+    .taskbar-logo:hover{opacity:0.9}
+    .taskbar-nav{display:flex;gap:1rem;align-items:center}
+    .taskbar-link{color:var(--fg);text-decoration:none;padding:0.5rem 0.75rem;border-radius:8px;transition:background-color 0.2s, transform 0.15s}
+    .taskbar-link:hover{background-color:rgba(0,0,0,0.04)}
+    .taskbar-link:focus-visible{outline:3px solid rgba(15,188,255,0.7);outline-offset:2px}
+    @media(prefers-color-scheme:dark){.taskbar-link:hover{background-color:rgba(255,255,255,0.04)}}
+    .taskbar-link.active{background-color:var(--accent);color:white}
+    
+    /* 响应式调整 */
+    @media (max-width: 600px) {
+      .taskbar{padding:0.75rem 1rem}
+      .taskbar-nav{gap:0.5rem}
+      .taskbar-link{padding:0.4rem 0.6rem;font-size:0.9rem}
+    }
+    
+    /* 调整内容区域，避免被任务栏遮挡 */
+    .stack{margin-top:60px}
+    
     .card{background:var(--card);border-radius:var(--radius);padding:clamp(2rem,5vw,4rem);box-shadow:var(--shadow);text-align:center;max-width:600px;width:90%;animation:fadeIn .8s ease-out;outline:3px solid rgba(0,0,0,.08)}
     @keyframes fadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
     h1{font-size:clamp(2rem,5vw,3rem);font-weight:700;color:var(--accent);margin-bottom:.5em}
@@ -47,6 +68,21 @@
 </head>
 <body>
   <a class="skip-link" href="#main">跳过到内容</a>
+  
+  <!-- 任务栏 -->
+  <header class="taskbar">
+    <a href="index.html" class="taskbar-logo" aria-label="返回首页">
+      <span>🅒🅗🅦</span>
+      <span>CHW 服务器</span>
+    </a>
+    <nav class="taskbar-nav" aria-label="主导航">
+      <a href="index.html" class="taskbar-link active" aria-current="page">首页</a>
+      <a href="index1.html" class="taskbar-link">服务器介绍</a>
+      <a href="#game-title" class="taskbar-link">小游戏</a>
+      <a href="login.html" class="taskbar-link">登录/注册</a>
+    </nav>
+  </header>
+  
   <div class="stack">
     <main id="main" class="card" aria-label="欢迎卡片">
       <h1>欢迎来到 CHW 服务器 · 我的世界qq群1015259615</h1>
@@ -59,6 +95,14 @@
       <footer>© 2025 CHW Team</footer>
       
     </main>
+    
+    <!-- 公告区域 -->
+    <section class="card" aria-labelledby="announcements-title">
+      <h2 id="announcements-title" class="game-title">最新公告</h2>
+      <div id="announcements-container" class="announcements-container">
+        <!-- 公告将在这里动态显示 -->
+      </div>
+    </section>
     <section class="card" aria-labelledby="game-title">
       <h2 id="game-title" class="game-title">小游戏：方块反应挑战（找苦力怕）</h2>
       <p>在 30 秒内尽可能多地点击绿色苦力怕方块，收集积分！</p>
@@ -75,6 +119,8 @@
       <div id="status" class="status" aria-live="polite"></div>
     </section>
   </div>
+  <script src="data.js"></script>
+  <script src="auth.js"></script>
   <script>
     function showWelcome(){alert("你好，欢迎登陆 CHW 服务器！");}
     (function reactionGame(){
@@ -89,6 +135,11 @@
       function resetBest(){localStorage.removeItem('chw_best');state.best=0;bestEl.textContent='0';statusEl.textContent='已重置最佳成绩。';}
       startBtn.addEventListener('click',startGame);resetBtn.addEventListener('click',resetBest);
     })();
+      
+      // 页面加载时显示公告
+      window.addEventListener('DOMContentLoaded', function() {
+        displayAnnouncements();
+      });
   </script>
 </body>
 </html>
