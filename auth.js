@@ -100,8 +100,8 @@ function handleRegister(event) {
   const inviteCode = document.getElementById('inviteCode').value.trim();
   
   // 简单的客户端验证
-  if (!username || !password || !inviteCode) {
-    showError('errorMessage', '请填写所有必填字段！');
+  if (!username || !password) {
+    showError('errorMessage', '请输入用户名和密码！');
     return;
   }
   
@@ -122,13 +122,14 @@ function handleRegister(event) {
     return;
   }
   
-  // 验证邀请码
-  if (!validateInviteCode(inviteCode)) {
+  // 如果提供了邀请码，验证邀请码
+  if (inviteCode && !validateInviteCode(inviteCode)) {
     showError('errorMessage', '无效或已使用的邀请码！');
     return;
   }
   
   // 注册成功，添加用户
+  // 无论是否提供邀请码，都注册为普通用户
   users[username] = {
     password: password, // 实际应用中应使用加密存储
     role: 'user',
@@ -136,8 +137,10 @@ function handleRegister(event) {
   };
   saveUsers(users);
   
-  // 标记邀请码已使用
-  markInviteCodeAsUsed(inviteCode, username);
+  // 如果提供了邀请码，标记邀请码已使用
+  if (inviteCode) {
+    markInviteCodeAsUsed(inviteCode, username);
+  }
   
   // 显示成功消息并跳转到登录页
   showSuccess('successMessage', '注册成功！即将跳转到登录页...');
