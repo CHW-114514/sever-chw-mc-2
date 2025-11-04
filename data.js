@@ -18,7 +18,7 @@ function initData() {
   // 初始化邀请码数据（使用固定邀请码）
   if (!localStorage.getItem('inviteCodes')) {
     // 固定的邀请码列表
-    const fixedCodes = ['CHW2024', 'SERVER2024', 'WELCOME24', 'CHWINVITE', 'ADMINCODE'];
+    const fixedCodes = ['CHW2024', 'SERVER2024', 'WELCOME24', 'CHWINVITE', 'ADMINCODE', 'CHW001'];
     const defaultInviteCodes = {};
     fixedCodes.forEach(code => {
       defaultInviteCodes[code] = {

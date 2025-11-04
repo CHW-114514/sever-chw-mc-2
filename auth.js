@@ -95,58 +95,83 @@ function handleLogin(event) {
 function handleRegister(event) {
   event.preventDefault();
   
+  // 显示调试信息
+  console.log('注册表单提交');
+  
   const username = document.getElementById('username').value.trim();
   const password = document.getElementById('password').value;
   const inviteCode = document.getElementById('inviteCode').value.trim();
   
+  console.log('注册信息:', { username, passwordLength: password.length, inviteCode: inviteCode || '空' });
+  
   // 简单的客户端验证
   if (!username || !password) {
     showError('errorMessage', '请输入用户名和密码！');
+    console.log('错误: 用户名或密码为空');
     return;
   }
   
   if (username.length < 3 || username.length > 20) {
     showError('errorMessage', '用户名长度应在3-20个字符之间！');
+    console.log('错误: 用户名长度不符合要求');
     return;
   }
   
   if (password.length < 6) {
     showError('errorMessage', '密码长度至少为6个字符！');
+    console.log('错误: 密码长度不符合要求');
     return;
   }
   
-  // 获取用户数据并检查用户名是否已存在
-  const users = getUsers();
-  if (users[username]) {
-    showError('errorMessage', '用户名已存在！');
-    return;
+  try {
+    // 获取用户数据并检查用户名是否已存在
+    const users = getUsers();
+    console.log('获取用户数据成功');
+    
+    if (users[username]) {
+      showError('errorMessage', '用户名已存在！');
+      console.log('错误: 用户名已存在');
+      return;
+    }
+    
+    // 如果提供了邀请码，验证邀请码
+    if (inviteCode) {
+      if (!validateInviteCode(inviteCode)) {
+        showError('errorMessage', '无效或已使用的邀请码！');
+        console.log('错误: 邀请码无效或已使用');
+        return;
+      }
+    }
+    
+    // 注册成功，添加用户
+    // 无论是否提供邀请码，都注册为普通用户
+    users[username] = {
+      password: password, // 实际应用中应使用加密存储
+      role: 'user',
+      createdAt: new Date().toISOString()
+    };
+    
+    console.log('准备保存用户数据');
+    saveUsers(users);
+    console.log('用户数据保存成功');
+    
+    // 如果提供了邀请码，标记邀请码已使用
+    if (inviteCode) {
+      markInviteCodeAsUsed(inviteCode, username);
+      console.log('邀请码已标记为使用');
+    }
+    
+    // 显示成功消息并跳转到登录页
+    showSuccess('successMessage', '注册成功！即将跳转到登录页...');
+    console.log('注册成功，准备跳转');
+    setTimeout(() => {
+      window.location.href = 'login.html';
+    }, 2000);
+  } catch (error) {
+    // 捕获任何可能的错误
+    console.error('注册过程发生错误:', error);
+    showError('errorMessage', '注册失败，请稍后重试！错误详情: ' + error.message);
   }
-  
-  // 如果提供了邀请码，验证邀请码
-  if (inviteCode && !validateInviteCode(inviteCode)) {
-    showError('errorMessage', '无效或已使用的邀请码！');
-    return;
-  }
-  
-  // 注册成功，添加用户
-  // 无论是否提供邀请码，都注册为普通用户
-  users[username] = {
-    password: password, // 实际应用中应使用加密存储
-    role: 'user',
-    createdAt: new Date().toISOString()
-  };
-  saveUsers(users);
-  
-  // 如果提供了邀请码，标记邀请码已使用
-  if (inviteCode) {
-    markInviteCodeAsUsed(inviteCode, username);
-  }
-  
-  // 显示成功消息并跳转到登录页
-  showSuccess('successMessage', '注册成功！即将跳转到登录页...');
-  setTimeout(() => {
-    window.location.href = 'login.html';
-  }, 2000);
 }
 
 // 处理退出登录
