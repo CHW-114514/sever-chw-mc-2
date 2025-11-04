@@ -16,19 +16,26 @@ function initData() {
   }
   
   // 初始化邀请码数据（使用固定邀请码）
-  if (!localStorage.getItem('inviteCodes')) {
-    // 固定的邀请码列表
-    const fixedCodes = ['CHW2024', 'SERVER2024', 'WELCOME24', 'CHWINVITE', 'ADMINCODE', 'CHW001'];
-    const defaultInviteCodes = {};
-    fixedCodes.forEach(code => {
-      defaultInviteCodes[code] = {
+  const fixedCodes = ['CHW2024', 'SERVER2024', 'WELCOME24', 'CHWINVITE', 'ADMINCODE', 'CHW001'];
+  let inviteCodes = JSON.parse(localStorage.getItem('inviteCodes') || '{}');
+  let hasChanges = false;
+  
+  // 确保所有固定邀请码都存在
+  fixedCodes.forEach(code => {
+    if (!inviteCodes[code]) {
+      inviteCodes[code] = {
         used: false,
         createdAt: new Date().toISOString(),
         usedBy: null,
         usedAt: null
       };
-    });
-    localStorage.setItem('inviteCodes', JSON.stringify(defaultInviteCodes));
+      hasChanges = true;
+    }
+  });
+  
+  // 如果有变更，保存到localStorage
+  if (hasChanges) {
+    localStorage.setItem('inviteCodes', JSON.stringify(inviteCodes));
   }
   
   // 初始化公告数据
