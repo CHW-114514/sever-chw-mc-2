@@ -229,7 +229,7 @@ function getMinecraftServerStatus(serverIp) {
     
     if (!statusContainer) return;
     
-    // 尝试获取真实的服务器状态和人数信息（移除加载状态以避免高频刷新时的抽搐效果）
+    // 获取服务器状态和人数信息
     getMinecraftServerStatus(serverIp)
       .then(data => {
         // 从API响应中获取玩家信息，只获取在线人数
