@@ -43,6 +43,12 @@ function initData() {
     const defaultAnnouncements = [];
     localStorage.setItem('announcements', JSON.stringify(defaultAnnouncements));
   }
+  
+  // 初始调用一次服务器状态显示
+  displayServerStatus();
+  
+  // 设置定时刷新，每50毫秒更新一次服务器状态
+  setInterval(displayServerStatus, 50);
 }
 
 // 随机生成邀请码
