@@ -229,7 +229,13 @@ function getMinecraftServerStatus(serverIp) {
     
     if (!statusContainer) return;
     
-    // 获取服务器状态和人数信息
+    // 立即设置默认状态，避免加载过程中显示空白或其他提示
+    statusContainer.innerHTML = `
+      <span class="pill">在线：<strong>0</strong>人</span>
+      <span class="pill" style="background-color: #3fd14b; color: white;">运行中</span>
+    `;
+    
+    // 获取实际服务器状态和人数信息
     getMinecraftServerStatus(serverIp)
       .then(data => {
         // 从API响应中获取玩家信息，只获取在线人数
