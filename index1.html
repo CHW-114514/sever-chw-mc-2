@@ -87,7 +87,11 @@
     <main class="card">
       <h1>CHW 服务器</h1>
       <p>欢迎了解我们的服务器</p>
-      <p>IP: <strong>mcrhy.online</strong></p>
+      <p>服务器IP: <strong>mcthy.online</strong></p>
+          <p class="connect-info">连接信息：端口 19733</p>
+      <div id="server-status" class="stats">
+        <!-- 服务器状态将在这里动态显示 -->
+      </div>
       <div class="info">
         <span class="pill">1.20.1 版本</span>
         <span class="pill">生存、创造</span>
@@ -140,5 +144,11 @@
   </div>
 <script src="data.js"></script>
   <script src="auth.js"></script>
+  <script>
+    // 页面加载时显示服务器状态
+    window.addEventListener('DOMContentLoaded', function() {
+      displayServerStatus();
+    });
+  </script>
   </body>
 </html>

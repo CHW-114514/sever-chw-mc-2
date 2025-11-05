@@ -88,7 +88,12 @@
       <h1>欢迎来到 CHW 服务器 · 我的世界qq群1015259615</h1>
       <p>进入方块世界，开拓与冒险</p>
       <button class="btn" type="button" aria-label="开始探索" onclick="showWelcome()">开始探索</button>
-      <p>IP:mcrhy.online</p>
+      <p>IP:mcthy.online</p>
+      <div id="server-status" class="stats">
+        <!-- 服务器状态将在这里动态显示 -->
+      </div>
+      <!-- 服务器连接指南 -->
+      <p class="connect-info">在Minecraft中直接连接服务器（端口:19733）</p>
       <div class="game-actions">
         <a class="btn alt" href="index1.html" aria-label="查看服务器介绍">服务器介绍</a>
       </div>
@@ -136,9 +141,10 @@
       startBtn.addEventListener('click',startGame);resetBtn.addEventListener('click',resetBest);
     })();
       
-      // 页面加载时显示公告
+      // 页面加载时显示公告和服务器状态
       window.addEventListener('DOMContentLoaded', function() {
         displayAnnouncements();
+        displayServerStatus();
       });
   </script>
 </body>
