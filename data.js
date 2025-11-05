@@ -186,15 +186,16 @@ function isAdmin() {
 }
 
 // 获取Minecraft服务器状态
-function getMinecraftServerStatus(serverIp, port = 19733) {
+function getMinecraftServerStatus(serverIp) {
   return new Promise((resolve, reject) => {
     // 设置超时控制
     const timeoutId = setTimeout(() => {
       reject(new Error('API调用超时'));
     }, 10000); // 10秒超时
     
-    // 使用mcapi.us API进行服务器状态查询，添加端口号参数
-    const apiUrl = `https://mcapi.us/server/status?ip=${encodeURIComponent(serverIp)}&port=${port}`;
+    // 使用mcapi.us API进行服务器状态查询（内部使用）
+    // 注意：这里不再显式指定端口号，使用默认端口或API自动处理
+    const apiUrl = `https://mcapi.us/server/status?ip=${encodeURIComponent(serverIp)}`;
     
     fetch(apiUrl)
       .then(response => {
@@ -217,8 +218,7 @@ function getMinecraftServerStatus(serverIp, port = 19733) {
 
 // 显示服务器状态
   function displayServerStatus() {
-    const serverIp = 'mcthy.online'; // 更新为新的服务器地址
-    const serverPort = 19733; // 保持相同的端口号
+    const serverIp = 'mcthy.online'; // 服务器地址
     const statusContainer = document.getElementById('server-status');
     
     if (!statusContainer) return;
@@ -227,7 +227,7 @@ function getMinecraftServerStatus(serverIp, port = 19733) {
     statusContainer.innerHTML = '<span class="pill">加载中...</span>';
     
     // 尝试获取真实的服务器状态和人数信息
-    getMinecraftServerStatus(serverIp, serverPort)
+    getMinecraftServerStatus(serverIp)
       .then(data => {
         // 从API响应中获取玩家信息，只获取在线人数
         const playersNow = data.players.now || 0;
