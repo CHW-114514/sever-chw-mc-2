@@ -44,11 +44,8 @@ function initData() {
     localStorage.setItem('announcements', JSON.stringify(defaultAnnouncements));
   }
   
-  // 初始调用一次服务器状态显示
-  displayServerStatus();
-  
-  // 设置定时刷新，每50毫秒更新一次服务器状态
-  setInterval(displayServerStatus, 50);
+  // 初始调用一次公告显示
+  setTimeout(displayAnnouncements, 1000); // 延迟1秒执行，让页面先加载完成
 }
 
 // 随机生成邀请码
@@ -130,6 +127,84 @@ function addAnnouncement(title, content) {
   return newAnnouncement;
 }
 
+// 显示公告
+function displayAnnouncements() {
+  const container = document.getElementById('announcements-container');
+  if (!container) {
+    console.error('未找到公告容器元素');
+    return;
+  }
+  
+  const announcements = getAnnouncements();
+  
+  if (announcements.length === 0) {
+    container.innerHTML = '<p class="no-announcements">暂无公告</p>';
+    return;
+  }
+  
+  // 限制显示最近的几条公告
+  const displayLimit = 3;
+  const announcementsToDisplay = announcements.slice(0, displayLimit);
+  
+  let html = '';
+  announcementsToDisplay.forEach(announcement => {
+    // 格式化日期
+    const date = new Date(announcement.createdAt);
+    const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    
+    html += `
+      <div class="announcement-item">
+        <h3 class="announcement-title">${announcement.title}</h3>
+        <div class="announcement-content">${announcement.content}</div>
+        <div class="announcement-date">${formattedDate}</div>
+      </div>
+    `;
+  });
+  
+  container.innerHTML = html;
+  
+  // 添加CSS样式
+  const style = document.createElement('style');
+  style.textContent = `
+    .announcements-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    .announcement-item {
+      padding: 1rem;
+      background: rgba(0, 0, 0, 0.04);
+      border-radius: 8px;
+      text-align: left;
+    }
+    @media (prefers-color-scheme: dark) {
+      .announcement-item {
+        background: rgba(255, 255, 255, 0.04);
+      }
+    }
+    .announcement-title {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: var(--accent);
+    }
+    .announcement-content {
+      margin-bottom: 0.5rem;
+      line-height: 1.5;
+    }
+    .announcement-date {
+      font-size: 0.9rem;
+      opacity: 0.7;
+      text-align: right;
+    }
+    .no-announcements {
+      text-align: center;
+      opacity: 0.7;
+      padding: 2rem;
+    }
+  `;
+  document.head.appendChild(style);
+}
+
 // 验证邀请码是否有效
 function validateInviteCode(code) {
   const inviteCodes = getInviteCodes();
@@ -187,76 +262,8 @@ function isLoggedIn() {
 
 // 检查是否为管理员
 function isAdmin() {
-  const state = getLoginState();
-  return state && state.role === 'admin';
-}
-
-// 获取Minecraft服务器状态
-function getMinecraftServerStatus(serverIp) {
-  return new Promise((resolve, reject) => {
-    // 设置超时控制
-    const timeoutId = setTimeout(() => {
-      reject(new Error('API调用超时'));
-    }, 10000); // 10秒超时
-    
-    // 使用mcapi.us API进行服务器状态查询（内部使用）
-    // 注意：这里不再显式指定端口号，使用默认端口或API自动处理
-    const apiUrl = `https://mcapi.us/server/status?ip=${encodeURIComponent(serverIp)}`;
-    
-    fetch(apiUrl)
-      .then(response => {
-        clearTimeout(timeoutId);
-        if (!response.ok) {
-          throw new Error('服务器响应异常');
-        }
-        return response.json();
-      })
-      .then(data => {
-        resolve(data);
-      })
-      .catch(error => {
-        clearTimeout(timeoutId);
-        console.error('获取服务器状态失败:', error);
-        reject(error);
-      });
-  });
-}
-
-// 显示服务器状态
-  function displayServerStatus() {
-    const serverIp = 'mcthy.online'; // 服务器地址
-    const statusContainer = document.getElementById('server-status');
-    
-    if (!statusContainer) return;
-    
-    // 立即设置默认状态，避免加载过程中显示空白或其他提示
-    statusContainer.innerHTML = `
-      <span class="pill">在线：<strong>0</strong>人</span>
-      <span class="pill" style="background-color: #3fd14b; color: white;">运行中</span>
-    `;
-    
-    // 获取实际服务器状态和人数信息
-    getMinecraftServerStatus(serverIp)
-      .then(data => {
-        // 从API响应中获取玩家信息，只获取在线人数
-        const playersNow = data.players.now || 0;
-        const isOnline = data.online || true;
-        
-        statusContainer.innerHTML = `
-          <span class="pill">在线：<strong>${playersNow}</strong>人</span>
-          <span class="pill" style="background-color: ${isOnline ? '#3fd14b' : '#ff4444'}; color: white;">${isOnline ? '运行中' : '离线'}</span>
-        `;
-      })
-      .catch(error => {
-        // API调用失败时，显示默认信息，避免提示连接失败
-        console.log('无法获取真实服务器状态，显示默认信息:', error);
-        const playersNow = 5; // 默认在线人数
-        
-        statusContainer.innerHTML = `
-          <span class="pill">在线：<strong>${playersNow}</strong>人</span>
-          <span class="pill" style="background-color: #3fd14b; color: white;">运行中</span>
-        `;
-      });
+  const user = getLoginState();
+  return user && user.role === 'admin';
 }
 
 // 初始化数据

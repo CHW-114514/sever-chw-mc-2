@@ -89,9 +89,6 @@
       <p>进入方块世界，开拓与冒险</p>
       <button class="btn" type="button" aria-label="开始探索" onclick="showWelcome()">开始探索</button>
       <p>IP:mcthy.online</p>
-      <div id="server-status" class="stats">
-        <!-- 服务器状态将在这里动态显示 -->
-      </div>
       <!-- 服务器连接指南 -->
       <p class="connect-info">在Minecraft中直接连接服务器</p>
       <div class="game-actions">
@@ -107,6 +104,17 @@
       <div id="announcements-container" class="announcements-container">
         <!-- 公告将在这里动态显示 -->
       </div>
+    </section>
+    
+    <!-- 赞赏区域 -->
+    <section class="card" aria-labelledby="donation-title">
+      <h2 id="donation-title" class="game-title">支持服务器</h2>
+      <p>您的支持将帮助我们持续维护服务器</p>
+      <div class="donation-qrcode" style="margin: 1.5rem auto; max-width: 300px; display: flex; justify-content: center;">
+        <img src="a88e3d9d-e330-4392-b941-2471f874f06b.jpeg" alt="赞赏码" style="max-width: 100%; border-radius: 12px; box-shadow: var(--shadow);">
+      </div>
+      <p style="font-style: italic; opacity: 0.9;">赞助的所有的钱都用以服务器</p>
+      <p style="font-weight: bold; margin-top: 0.5rem;">永久的赞赏码</p>
     </section>
     <section class="card" aria-labelledby="game-title">
       <h2 id="game-title" class="game-title">小游戏：方块反应挑战（找苦力怕）</h2>
@@ -141,10 +149,9 @@
       startBtn.addEventListener('click',startGame);resetBtn.addEventListener('click',resetBest);
     })();
       
-      // 页面加载时显示公告和服务器状态
+      // 页面加载时显示公告
       window.addEventListener('DOMContentLoaded', function() {
         displayAnnouncements();
-        displayServerStatus();
       });
   </script>
 </body>
